@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option go_package = "genprotos/";
+
+package notification;
+
+
+service NotificationService{
+    rpc CreateNotification(CreateNotificationRequest)returns(CreateNotificationResponse){}
+    rpc GetNotifications(GetNotificationsRequest)returns(GetNotificationsResponse){}
+    rpc OrderConfirmation(OrderConfirmationRequest) returns(OrderConfirmationResponse){}
+    rpc NewOrder(NewOrderRequest) returns(NewOrderResponse){}
+}
+
+message GetNotificationsRequest{
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message GetNotificationsResponse{
+    repeated Notification notifications = 1;
+}
+
+message Notification{
+    string user_id = 1;
+    string courier_id = 2;
+    string order_id = 3;
+    string message = 4;
+    string id = 5;
+}
+
+message CreateNotificationRequest{
+    string user_id = 1;
+    string courier_id = 2;
+    string order_id = 3;
+    string message = 4;
+}
+
+message CreateNotificationResponse{}
+
+message OrderConfirmationRequest{
+    string user_id = 1;
+    string order_id = 2;
+}
+
+message OrderConfirmationResponse{}
+
+message NewOrderRequest{
+    string courier_id = 1;
+    string order_id = 2;
+}
+
+message NewOrderResponse{}
+

@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+option go_package = "genprotos/";
+
+package order_items;
+
+service OrderItemsService {
+    rpc CreateOrderItems(CreateOrderItemsRequest) returns (CreateOrderItemsResponse) {}
+    rpc UpdateOrderItems(UpdateOrderItemsRequest) returns (UpdateOrderItemsResponse) {}
+    rpc GetByIdOrderItems(GetByIdOrderItemsRequest) returns (GetByIdOrderItemsResponse) {}
+    rpc GetAllOrderItems(GetAllOrderItemsRequest) returns (GetAllOrderItemsResponse) {}
+    rpc DeleteOrderItems(DeleteOrderItemsRequest) returns (DeleteOrderItemsResponse) {}
+}
+
+
+message CreateOrderItemsRequest {
+    string order_id = 1;
+    string product_id = 2;
+    int32 quantity = 3;
+    string options = 4;
+}
+
+message CreateOrderItemsResponse {
+    string id = 1;
+    string order_id = 2;
+    int32 quantity = 3;
+    string options = 4;
+    string product_id = 5;
+}
+
+message UpdateOrderItemsRequest {
+    string id = 1;
+    string order_id = 2;
+    int32 quantity = 3;
+    string options = 4;
+    string product_id = 5;
+}
+
+message UpdateOrderItemsResponse {
+    string id = 1;
+    string order_id = 2;
+    int32 quantity = 3;
+    string options = 4;
+    string product_id = 5;
+}
+
+message GetByIdOrderItemsRequest {
+    string id = 1;
+}
+
+message GetByIdOrderItemsResponse {
+    string id = 1;
+    string product_id = 2;
+    string order_id = 3;
+    int32 quantity = 4;
+    string options = 5;
+}
+
+message GetAllOrderItemsRequest {
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message GetAllOrderItemsResponse {
+    repeated GetByIdOrderItemsResponse orders = 1;
+}
+
+message DeleteOrderItemsRequest {
+    string id = 1;
+}
+
+message DeleteOrderItemsResponse {}

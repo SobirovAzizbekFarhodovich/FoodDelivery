@@ -1,0 +1,17 @@
+# version: '3.9'
+
+# services:
+#   gateway:
+#     container_name: gateway
+#     build: .
+#     ports:
+#       - "8081:8081"
+#     networks:
+#       - Api
+
+# networks:
+#   Api:
+#       driver: bridge
+
+# volumes:
+#   db:

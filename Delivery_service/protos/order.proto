@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+option go_package = "genprotos/";
+
+package order;
+
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse) {}
+    rpc UpdateOrder(UpdateOrderRequest) returns (UpdateOrderResponse) {}
+    rpc GetByIdOrder(GetByIdOrderRequest) returns (GetByIdOrderResponse) {}
+    rpc GetAllOrders(GetAllOrdersRequest) returns (GetAllOrdersResponse) {}
+    rpc DeleteOrder(DeleteOrderRequest) returns (DeleteOrderResponse) {}
+    rpc CheckoutOrder(CheckoutOrderRequest) returns(CheckoutOrderResponse){}
+    rpc GetByLocation(GetByLocationRequest)returns(GetByLocationResponse){}
+    rpc UpdateStatus(UpdateStatusRequest) returns (UpdateStatusResponse){}
+    rpc GetHistory(GetHistoryRequest) returns(GetHistoryResponse){}
+}
+
+message GetHistoryRequest{
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message GetHistoryResponse{
+    repeated History history = 1;
+}
+
+message History{
+    string order_id = 1;
+    string user_id = 2;
+    int32 total_amount = 3;
+    string status = 4;
+}
+
+message UpdateStatusRequest{
+    string order_id = 1;
+    string status = 2;
+}
+
+message UpdateStatusResponse{}
+
+message OrderAssignRequest{
+    string order_id = 1;
+    string courier_id = 2;
+}
+
+message OrderAssignResponse{}
+
+message GetByLocationRequest{
+    string location = 1;    
+}
+
+message GetByLocationResponse{
+    repeated Location infos = 1;
+}
+
+message Location{
+    string id = 1;
+    string user_id = 2;
+    int32 total_amount = 3;
+}
+
+message CheckoutOrderRequest{
+    string user_id = 1;
+}
+
+message CheckoutOrderResponse{
+    string order_id = 1;
+    string message = 2;
+}
+
+message CreateOrderRequest {
+    string user_id = 1;
+    double total_amount = 2;
+    string status = 3;
+    string courier_id = 4;
+    string location = 5;
+    string delivery_schedule = 6;
+}
+
+message CreateOrderResponse {
+    string id = 1;
+    double total_amount = 2;
+    string status = 3;
+    string courier_id = 4;
+    string location = 5;
+    string delivery_schedule = 6;
+    string user_id = 7;
+}
+
+message UpdateOrderRequest {
+    string id = 1;
+    double total_amount = 2;
+    string status = 3;
+    string courier_id = 4;
+    string location = 5;
+    string delivery_schedule = 6;
+}
+
+message UpdateOrderResponse {
+    string id = 1;
+    double total_amount = 2;
+    string status = 3;
+    string courier_id = 4;
+    string location = 5;
+    string delivery_schedule = 6;
+    string user_id = 7;
+}
+
+message GetByIdOrderRequest {
+    string id = 1;
+}
+
+message GetByIdOrderResponse {
+    string id = 1;
+    string user_id = 2;
+    double total_amount = 3;
+    string status = 4;
+    string courier_id = 5;
+    string location = 6; 
+    string delivery_schedule = 7;
+}
+
+message GetAllOrdersRequest {
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message GetAllOrdersResponse {
+    repeated Order orders = 1;
+}
+
+message Order {
+    string id = 1;
+    string user_id = 2;
+    double total_amount = 3;
+    string status = 4;
+    string courier_id = 5;
+    string location = 6; 
+    string delivery_schedule = 7;
+}
+
+message DeleteOrderRequest {
+    string id = 1;
+}
+
+message DeleteOrderResponse {}

@@ -1,0 +1,148 @@
+version: '1.0'
+
+services:
+  api-gateway:
+    container_name: gateway
+    build: ./Api
+    depends_on:
+      - auth-service
+      - delivery-service
+    ports:
+      - "8081:8081"
+    networks:
+      - delivery
+    volumes:
+      - ./Api:/home/sobirov/go/src/gitlab.com/FoodDelivery/Api
+
+  auth-service:
+    container_name: auth_service
+    build: ./Auth
+    depends_on: 
+      - postgres-db
+      - delivery-service
+      - kafka
+      - redis
+      - zookeeper
+    ports:
+      - "8070:8070"
+    networks:
+      - delivery
+
+  delivery-service:
+    container_name: delivery_service
+    build: ./Delivery_service
+    depends_on:
+      - postgres-db1
+    ports:
+      - "50051:50051"
+    networks:
+      - delivery
+    
+  postgres-db:
+    container_name: postgres_auth
+    image: postgres:16.3
+    environment:
+      POSTGRES_USER: azizbek
+      POSTGRES_PASSWORD: 123
+      # PGDATA: /data/postgres
+      POSTGRES_DB: users
+    volumes:
+     - postgres_data:/var/lib/postgresql/data
+         #  - ./init-users-db.sh:/docker-entrypoint-initdb.d/init-users-db.sh
+    ports:
+      - "5431:5432"
+    networks:
+      - delivery
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d users -U azizbek"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  postgres-db1:
+    container_name: postgres_delivery
+    image: postgres:16.3
+    environment:
+      POSTGRES_USER: azizbek
+      POSTGRES_PASSWORD: 123
+      # PGDATA: /data/postgres
+      POSTGRES_DB: delivery
+    volumes:
+     - postgres_data1:/var/lib/postgresql/data
+    #  - ./init-delivery-db.sh:/docker-entrypoint-initdb.d/init-delivery-db.sh
+    ports:
+      - "5430:5432"
+    networks:
+      - delivery
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d postgres_delivery"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  migrate:
+    image: migrate/migrate
+    networks: 
+      - delivery
+    volumes:
+      - ./Auth/migrations:/migrations
+    command: [ "-path", "/migrations", "-database", "postgres://azizbek:123@postgres_auth:5432/users?sslmode=disable", "up" ]
+    depends_on:
+      - postgres-db
+
+  migrate1:
+    image: migrate/migrate
+    networks: 
+      - delivery
+    volumes:
+      - ./Delivery_service/migrations:/migrations
+    command: [ "-path", "/migrations", "-database", "postgres://azizbek:123@postgres_delivery:5432/delivery?sslmode=disable", "up" ]
+    depends_on:
+      - postgres-db1
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.4
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    networks:
+      - delivery
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    networks:
+      - delivery
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6380:6380"
+    networks:
+      - delivery
+
+networks:
+  delivery:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  postgres_data1:
+  mongo_data:

@@ -1,0 +1,54 @@
+# version: '3.8'
+
+# services:
+
+#   migrate:
+#     build: .
+#     container_name: migration
+#     image: migrate/migrate
+#     networks:
+#       - GLhost
+#     volumes:
+#       - ./migrations:/migrations
+#     command: [ "-path", "/migrations", "-database", "postgres://azizbek:123@post:5432/delivery?sslmode=disable", "up" ,]
+#     depends_on:
+#       - postgres-db
+
+#   postgres-db:
+#     container_name: post
+#     image: postgres:latest
+#     environment:
+#       POSTGRES_USER: 'azizbek'
+#       POSTGRES_PASSWORD: '123'
+#       POSTGRES_DB: 'delivery'
+#     volumes:
+#       - db:/post-database/post-memory
+#     ports:
+#       - "5438:5432"  # Changed the external port to 5433
+#     networks:
+#       - GLhost
+#     restart: unless-stopped
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -d postgres"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 5
+
+#   delivery_service:
+#     container_name: delivery_service
+#     build: ./
+#     depends_on:
+#       - postgres-db
+#     ports:
+#       - "50051:50051"
+#     networks:
+#       - GLhost
+
+# # Docker Networks
+# networks:
+#   GLhost:
+#     driver: bridge
+
+# # Docker Volumes
+# volumes:
+#   db:

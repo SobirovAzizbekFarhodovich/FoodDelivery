@@ -1,0 +1,32 @@
+p, user, /cart/create, POST
+p, user, /cart/update, PUT
+p, user, /cart/get/:id, GET
+p, user, /cart/delete/:id, DELETE
+p, user, /cart/get, GET
+
+p, user, /order_items/create, POST
+p, user, /order_items/update, PUT
+p, user, /order_items/get/:id, GET
+p, user, /order_items/delete/:id, DELETE
+p, user, /order_items/get, GET
+
+p, user, /order/create, POST
+p, user, /order/update, PUT
+p, user, /order/get/:id, GET
+p, user, /order/delete/:id, DELETE
+p, user, /order/get, GET
+p, user, /order/:location, GET
+p, user, /order/status, PUT
+p, user, /order/history, GET
+
+p, user, /product/create, POST
+p, user, /product/update, PUT
+p, user, /product/get/:id, GET
+p, user, /product/delete/:id, DELETE
+p, user, /product/get, GET
+
+p, user, /task/create, POST
+p, user, /task/update, PUT
+p, user, /task/get/:id, GET
+p, user, /task/delete/:id, DELETE
+p, user, /task/get, GET

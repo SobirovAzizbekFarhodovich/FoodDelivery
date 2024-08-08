@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+option go_package = "genprotos/";
+
+package cart;
+
+
+service CartService{
+    rpc CreateCart (CreateCartRequest) returns(CreateCartResponse){}
+    rpc UpdateCart (UpdateCartRequest) returns(UpdateCartResponse){}
+    rpc DeleteCart (DeleteCartRequest) returns(DeleteCartResponse){}
+    rpc GetAllCart (GetAllCartRequest) returns(GetAllCartResponse){}
+    rpc GetByIdCart(GetByIdCartRequest)returns(GetByIdCartResponse){}
+}
+
+message CreateCartRequest{
+    string id = 1;
+    string user_id = 2;
+    string product_id = 3;
+    int32 quantity = 4;
+    string option = 5;
+    
+}
+
+message CreateCartResponse{
+    string id = 1;
+    string user_id = 2;
+    string product_id = 3;
+    int32 quantity = 4;
+    string option = 5;
+}
+
+message UpdateCartRequest{
+    string id = 1;
+    string user_id = 2;
+    string product_id = 3;
+    int32 quantity = 4;
+    string option = 5;
+}
+
+message UpdateCartResponse{
+    string id = 1;
+    string user_id = 2;
+    string product_id = 3;
+    int32 quantity = 4;
+    string option = 5;
+}
+
+message DeleteCartRequest{
+    string id = 1;
+}
+
+message DeleteCartResponse{}
+
+message GetByIdCartRequest{
+    string id = 1;
+}
+
+message GetByIdCartResponse{
+    string id = 1;
+    string user_id = 2;
+    string product_id = 3;
+    int32 quantity = 4;
+    string option = 5;
+}
+
+message GetAllCartRequest{
+    int32 limit = 1;
+    int32 page = 2;
+}
+
+message GetAllCartResponse{
+    repeated GetByIdCartResponse carts = 1;
+}
